@@ -5,6 +5,7 @@ import '../styles/global.css';
 import { Image } from 'astro:assets';
 import headshot from '../assets/headshot.png';
 import { ViewTransitions } from 'astro:transitions';
+import mayoroofPreview from '../assets/portfolio/mayoroof.png';
 ---
 
 <!DOCTYPE html>
@@ -12,16 +13,22 @@ import { ViewTransitions } from 'astro:transitions';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ariel Digital Solutions | Web Development & Tech Consulting</title>
-    <meta name="description" content="Freelance web developer and tech consultant, currently a UGA student and Fortune 500 intern. Specializing in creating beautiful, functional websites for small businesses.">
+    <title>Ariel Digital Solutions | Web Development & Digital Marketing</title>
+    <meta name="description" content="Freelance web developer and digital marketing consultant, currently a UGA student and Fortune 500 intern. Specializing in websites, SEO, and marketing for small businesses and contractors.">
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Import the TypeIt library for the improved typing animation -->
     <script src="https://unpkg.com/typeit@8.7.1/dist/index.umd.js"></script>
     
     <ViewTransitions />
+
+    <!-- This script prevents the flash of unanimated content on refresh -->
+    <script is:inline>
+        document.documentElement.classList.add('js');
+    </script>
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased font-sans">
 
@@ -29,27 +36,23 @@ import { ViewTransitions } from 'astro:transitions';
     <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="/" class="flex items-center space-x-3" transition:animate="fade">
-                <!-- Updated logo path -->
                 <img src="/logo.png" alt="Ariel Digital Solutions Logo" class="h-10 w-auto">
                 <span class="text-xl font-bold text-gray-900 tracking-tight hidden sm:block">Ariel Digital Solutions</span>
             </a>
             <div class="hidden md:flex items-center space-x-8">
                 <a href="#services" class="text-gray-600 hover:text-cyan-600 transition-colors duration-300">Services</a>
+                <a href="#portfolio" class="text-gray-600 hover:text-cyan-600 transition-colors duration-300">Portfolio</a>
                 <a href="#about" class="text-gray-600 hover:text-cyan-600 transition-colors duration-300">About</a>
                 <a href="#contact" class="bg-cyan-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-cyan-600 transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5">Contact</a>
             </div>
             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                <svg id="menu-open-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-                <svg id="menu-close-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <svg id="menu-open-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                <svg id="menu-close-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
         </nav>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 border-t border-gray-200">
             <a href="#services" class="block py-2 text-gray-600 hover:text-cyan-600">Services</a>
+            <a href="#portfolio" class="block py-2 text-gray-600 hover:text-cyan-600">Portfolio</a>
             <a href="#about" class="block py-2 text-gray-600 hover:text-cyan-600">About</a>
             <a href="#contact" class="block mt-2 text-center bg-cyan-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-cyan-600">Contact</a>
         </div>
@@ -61,11 +64,10 @@ import { ViewTransitions } from 'astro:transitions';
             <div class="container mx-auto px-6 text-center">
                 <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight" transition:animate="slide-up">
                     Building Digital Experiences,<br>
-                    <!-- This span is now the target for the TypeIt script -->
                     <span id="typing-animation" class="text-cyan-600"></span>
                 </h1>
                 <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-600" transition:animate="fade-up" data-delay="200">
-                    I'm a passionate freelance web developer and tech consultant, helping businesses establish a strong online presence.
+                    I'm a passionate freelance developer and marketing consultant, helping businesses establish a strong online presence.
                 </p>
                 <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4" transition:animate="fade-up" data-delay="400">
                     <a href="#contact" class="bg-cyan-500 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-cyan-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">Get a Free Quote</a>
@@ -74,31 +76,75 @@ import { ViewTransitions } from 'astro:transitions';
             </div>
         </section>
 
-        <!-- Services Section (content unchanged) -->
+        <!-- Services Section -->
         <section id="services" class="py-20 bg-gray-50 overflow-hidden">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900" data-animate-on-scroll>My Services</h2>
-                    <p class="mt-4 text-lg text-gray-600" data-animate-on-scroll>Solutions tailored to your business needs.</p>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900" data-animate-on-scroll>A Full Suite of Digital Services</h2>
+                    <p class="mt-4 text-lg text-gray-600" data-animate-on-scroll>Solutions to build, grow, and scale your business online.</p>
                 </div>
-                <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-animate-on-scroll>
                         <div class="text-cyan-500 mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
-                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">Custom Website Development</h3>
-                        <p class="text-gray-600">From simple landing pages to complex web applications. I build fast, responsive, and SEO-friendly websites that look great on all devices.</p>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">Custom Web Development</h3>
+                        <p class="text-gray-600">Fast, responsive, and SEO-friendly websites built to convert visitors into customers.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-animate-on-scroll data-delay="100">
+                        <div class="text-cyan-500 mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-1 4h1m5-4h1m-1 4h1" /></svg></div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">Contractor Websites</h3>
+                        <p class="text-gray-600">Specialized sites for contractors that showcase your work, build trust, and generate leads.</p>
                     </div>
                     <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-animate-on-scroll data-delay="200">
-                        <div class="text-cyan-500 mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.354a1.76 1.76 0 01.592-2.088L11 5.882z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882L15.5 2.5l2.5 4-2.5 4-2.5-4zM13 18.76l-1.5-4.5-1.5 4.5" /></svg></div>
-                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">Technology Consulting</h3>
-                        <p class="text-gray-600">Leveraging my industry experience, I provide expert advice on technology strategy, software selection, and digital transformation to optimize your operations.</p>
+                        <div class="text-cyan-500 mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg></div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">SEO</h3>
+                        <p class="text-gray-600">Climb the ranks on Google and attract more organic traffic with targeted SEO strategies.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-animate-on-scroll data-delay="300">
+                        <div class="text-cyan-500 mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a3.001 3.001 0 015.658 0M12 6a3 3 0 11-6 0 3 3 0 016 0zm6 0a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">Social Media</h3>
+                        <p class="text-gray-600">Build your brand and engage with your community through strategic social media management.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-animate-on-scroll data-delay="400">
+                        <div class="text-cyan-500 mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.354a1.76 1.76 0 01.592-2.088L11 5.882z" /><path d="M11 5.882L15.5 2.5l2.5 4-2.5 4-2.5-4z"/></svg></div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">Digital Marketing</h3>
+                        <p class="text-gray-600">Comprehensive marketing campaigns, from email marketing to paid ads, to grow your audience.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-animate-on-scroll data-delay="500">
+                        <div class="text-cyan-500 mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 00-4-4H3V9h2a4 4 0 004-4V3l5 4-5 4zM15 17v-2a4 4 0 014-4h2V9h-2a4 4 0 01-4-4V3l-5 4 5 4z" /></svg></div>
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-3">Tech Consulting</h3>
+                        <p class="text-gray-600">Expert advice on technology strategy and software selection to optimize your business operations.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- About Me Section (content unchanged) -->
-        <section id="about" class="py-20 bg-white overflow-hidden">
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="py-20 bg-white overflow-hidden">
             <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900" data-animate-on-scroll>My Featured Project</h2>
+                    <p class="mt-4 text-lg text-gray-600" data-animate-on-scroll>Here's a look at my latest client work.</p>
+                </div>
+                <div class="max-w-xl mx-auto">
+                    <div class="bg-gray-50 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col" data-animate-on-scroll>
+                        <Image src={mayoroofPreview} alt="Mayor Roof LLC website preview" class="rounded-t-xl object-cover" />
+                        <div class="p-8 flex flex-col flex-grow">
+                            <h3 class="text-2xl font-semibold text-gray-900 mb-2">Mayor Roof LLC</h3>
+                            <p class="text-gray-600 mb-4 flex-grow">A professional, lead-focused website for a premier roofing contractor. Built to establish trust and streamline the process for requesting free estimates.</p>
+                            <div class="mb-4">
+                                <span class="inline-block bg-cyan-100 text-cyan-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Astro</span>
+                                <span class="inline-block bg-cyan-100 text-cyan-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Tailwind CSS</span>
+                            </div>
+                            <a href="https://mayoroof.com/" target="_blank" rel="noopener noreferrer" class="mt-auto inline-block text-center bg-cyan-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-cyan-600 transition-colors duration-300">View Live Site</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-20 bg-gray-50 overflow-hidden">
+             <div class="container mx-auto px-6">
                 <div class="grid md:grid-cols-5 gap-12 items-center">
                     <div class="md:col-span-2" data-animate-on-scroll>
                         <Image src={headshot} alt="A photo of Ariel" class="rounded-full shadow-2xl mx-auto w-64 h-64 md:w-80 md:h-80 object-cover ring-4 ring-offset-4 ring-cyan-500/50" />
@@ -116,8 +162,8 @@ import { ViewTransitions } from 'astro:transitions';
             </div>
         </section>
 
-        <!-- Contact Section (content unchanged) -->
-        <section id="contact" class="py-20 bg-gray-50">
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 bg-white">
             <div class="container mx-auto px-6 text-center">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900" data-animate-on-scroll>Ready to Start a Project?</h2>
                 <p class="mt-4 max-w-xl mx-auto text-lg text-gray-600" data-animate-on-scroll>Let's connect! I'm excited to learn about your ideas and help bring them to life.</p>
@@ -126,7 +172,6 @@ import { ViewTransitions } from 'astro:transitions';
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-gray-800 text-white py-8">
         <div class="container mx-auto px-6 text-center">
             <p>&copy; {new Date().getFullYear()} Ariel Digital Solutions. All Rights Reserved.</p>
@@ -140,13 +185,11 @@ import { ViewTransitions } from 'astro:transitions';
         const mobileMenu = document.getElementById('mobile-menu');
         const openIcon = document.getElementById('menu-open-icon');
         const closeIcon = document.getElementById('menu-close-icon');
-
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
             openIcon.classList.toggle('hidden');
             closeIcon.classList.toggle('hidden');
         });
-
         const mobileMenuLinks = mobileMenu.querySelectorAll('a');
         mobileMenuLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -161,39 +204,41 @@ import { ViewTransitions } from 'astro:transitions';
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const delay = parseInt(entry.target.getAttribute('data-delay') || '0', 10);
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, delay);
+                    setTimeout(() => { entry.target.classList.add('visible'); }, delay);
                     observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.1 });
+        document.querySelectorAll('[data-animate-on-scroll]').forEach(el => { observer.observe(el); });
 
-        document.querySelectorAll('[data-animate-on-scroll]').forEach(el => {
-            observer.observe(el);
-        });
-
-        // --- NEW: TypeIt Animation Setup ---
-        // This script runs after the page is fully loaded to ensure all elements are available.
+        // --- TypeIt Animation Setup ---
         document.addEventListener('DOMContentLoaded', () => {
             new TypeIt("#typing-animation", {
                 strings: "One Line of Code at a Time.",
-                speed: 75, // A more natural typing speed
-                startDelay: 900, // Wait a bit after the initial page animations
-                cursorChar: "_", // A custom cursor character
-                waitUntilVisible: true, // Don't start until the element is in view
-                lifelong: true, // Keep the cursor blinking after the animation is done
+                speed: 75,
+                startDelay: 900,
+                cursorChar: "_",
+                waitUntilVisible: true,
+                lifelong: true,
             }).go();
         });
     </script>
     <style is:global>
-        /* CSS for the scroll animations */
+        /* Default state for elements if JS is disabled */
         [data-animate-on-scroll] {
-            opacity: 0;
-            transform: translateY(30px);
+            opacity: 1;
+            transform: translateY(0);
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
-        [data-animate-on-scroll].visible {
+
+        /* If JS is enabled, hide the elements so they can be animated in */
+        html.js [data-animate-on-scroll] {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        /* The state for elements that have been animated in */
+        html.js [data-animate-on-scroll].visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -203,20 +248,12 @@ import { ViewTransitions } from 'astro:transitions';
         @keyframes fade-out { to { opacity: 0; } }
         @keyframes slide-in { from { transform: translateY(30px); opacity: 0; } }
         @keyframes slide-out { to { transform: translateY(30px); opacity: 0; } }
-
-        /* Initial page load animations */
         [transition\:animate="slide-up"] { animation: slide-in 0.7s 0.1s both; }
         [transition\:animate="fade-up"] { animation: slide-in 0.7s both; }
         [transition\:animate="fade"] { animation: fade-in 0.7s both; }
-        
         [transition\:animate="fade-up"][data-delay="200"] { animation-delay: 0.3s; }
         [transition\:animate="fade-up"][data-delay="400"] { animation-delay: 0.5s; }
-
-        /* Custom styling for the TypeIt cursor to match the theme */
-        .ti-cursor {
-            color: #0891b2; /* Tailwind's cyan-600 */
-            font-weight: 800;
-        }
+        .ti-cursor { color: #0891b2; font-weight: 800; }
     </style>
 </body>
 </html>
