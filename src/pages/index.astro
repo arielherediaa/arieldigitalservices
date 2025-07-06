@@ -1,6 +1,4 @@
 ---
-// index.astro
-
 // We only need these imports for images and page transitions. All styling is handled below.
 import '../styles/global.css'; // This is needed for base Tailwind classes like `font-bold`, `grid`, etc.
 import { Image } from 'astro:assets';
@@ -110,6 +108,20 @@ import mayoroofPreview from '../assets/portfolio/mayoroof.png';
 
         /* TypeIt cursor */
         .ti-cursor { color: var(--text-accent); }
+
+        /* --- Scroll Progress Bar Styles (New) --- */
+        .progress-container {
+            width: 100%;
+            height: 3px; /* Adjust height as needed */
+            background-color: var(--bg-tertiary);
+            transition: background-color 0.3s ease;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: var(--text-accent);
+            width: 0%;
+            transition: background-color 0.3s ease; /* Only transition color, not width */
+        }
     </style>
 </head>
 <body class="antialiased font-sans">
@@ -136,6 +148,9 @@ import mayoroofPreview from '../assets/portfolio/mayoroof.png';
                 </button>
             </div>
         </nav>
+        <div class="progress-container">
+            <div id="progressBar" class="progress-bar"></div>
+        </div>
     </header>
 
     <main>
@@ -243,7 +258,32 @@ import mayoroofPreview from '../assets/portfolio/mayoroof.png';
             </div>
         </section>
 
-        <section id="contact" class="theme-bg-secondary py-20">
+        <section id="why-ariel" class="py-20 theme-bg-secondary">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="theme-text-primary text-3xl md:text-4xl font-bold" data-animate-on-scroll>Why Choose Ariel?</h2>
+                    <p class="theme-text-secondary mt-4 text-lg max-w-3xl mx-auto" data-animate-on-scroll>Get a personalized, high-performance website without the agency price tag.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div class="theme-bg-primary dark:bg-black/20 p-8 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-2" data-animate-on-scroll>
+                        <div class="theme-text-accent mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25" /></svg></div>
+                        <h3 class="theme-text-primary text-2xl font-semibold mb-3">Hand-Tailored & Future-Proof</h3>
+                        <p class="theme-text-secondary">Unlike agencies using generic templates, I hand-tailor your website from scratch. By using the latest technologies, I create an efficient, high-ROI site that is built to last.</p>
+                    </div>
+                    <div class="theme-bg-primary dark:bg-black/20 p-8 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-2" data-animate-on-scroll data-delay="100">
+                         <div class="theme-text-accent mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.575L16.5 21.75l-.398-1.175a3.375 3.375 0 00-2.455-2.456L12.75 18l1.175-.398a3.375 3.375 0 002.455-2.456L16.5 14.25l.398 1.175a3.375 3.375 0 002.456 2.456l1.175.398-1.175.398a3.375 3.375 0 00-2.456 2.456z" /></svg></div>
+                        <h3 class="theme-text-primary text-2xl font-semibold mb-3">Low Costs, High Value</h3>
+                        <p class="theme-text-secondary">Skip the fortune-charging companies with high operating costs. As a freelancer, I provide a personal, passionate service that delivers exceptional quality without the hefty price tag.</p>
+                    </div>
+                    <div class="theme-bg-primary dark:bg-black/20 p-8 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-2" data-animate-on-scroll data-delay="200">
+                        <div class="theme-text-accent mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg></div>
+                        <h3 class="theme-text-primary text-2xl font-semibold mb-3">Secure, Fast & Passionate</h3>
+                        <p class="theme-text-secondary">Your project is crafted with genuine passion and hosted on secure, fast infrastructure. I ensure your digital presence is not only beautiful but also reliable and performant.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="contact" class="theme-bg-primary dark:bg-black/20 py-20">
             <div class="container mx-auto px-6 text-center">
                 <h2 class="theme-text-primary text-3xl md:text-4xl font-bold" data-animate-on-scroll>Ready to Start a Project?</h2>
                 <p class="theme-text-secondary mt-4 max-w-xl mx-auto text-lg" data-animate-on-scroll>Let's connect! I'm excited to learn about your ideas and help bring them to life.</p>
@@ -303,6 +343,19 @@ import mayoroofPreview from '../assets/portfolio/mayoroof.png';
                 waitUntilVisible: true,
                 lifelong: true,
             }).go();
+
+            // --- Scroll Progress Bar Logic (New) ---
+            const progressBar = document.getElementById('progressBar');
+            const updateProgressBar = () => {
+                const totalScroll = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const currentScroll = window.scrollY;
+                const scrolled = (currentScroll / totalScroll) * 100;
+                if (progressBar) {
+                    progressBar.style.width = scrolled + '%';
+                }
+            };
+            window.addEventListener('scroll', updateProgressBar);
+            updateProgressBar(); // Initialize on load
         });
     </script>
     
