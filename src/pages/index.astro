@@ -1,7 +1,8 @@
 ---
 // index.astro
 
-import '../styles/global.css';
+// We only need these imports for images and page transitions. All styling is handled below.
+import '../styles/global.css'; // This is needed for base Tailwind classes like `font-bold`, `grid`, etc.
 import { Image } from 'astro:assets';
 import headshot from '../assets/headshot.png';
 import { ViewTransitions } from 'astro:transitions';
@@ -9,7 +10,6 @@ import mayoroofPreview from '../assets/portfolio/mayoroof.png';
 ---
 
 <!DOCTYPE html>
-<!-- The `dark` class will be added here by the script in the head -->
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
@@ -26,7 +26,6 @@ import mayoroofPreview from '../assets/portfolio/mayoroof.png';
     
     <ViewTransitions />
 
-    <!-- This critical script runs before the page renders to set the initial theme and prevent flashing -->
     <script is:inline>
         const theme = (() => {
             if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
@@ -37,164 +36,209 @@ import mayoroofPreview from '../assets/portfolio/mayoroof.png';
             }
             return 'light';
         })();
-
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-        
+        if (theme === 'dark') document.documentElement.classList.add('dark');
         document.documentElement.classList.add('js');
     </script>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 antialiased font-sans transition-colors duration-300">
 
-    <!-- Header & Navigation -->
-    <header class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm dark:shadow-none border-b border-transparent dark:border-gray-800 transition-colors duration-300">
+    <style is:global>
+        /* Define color variables for light and dark themes */
+        :root {
+            --bg-primary: #f8f9fa; /* Cleaner, very light off-white */
+            --bg-secondary: #ffffff; /* Pure white for cards */
+            --bg-tertiary: #f8f9fa; /* Consistent off-white for other elements */
+            --bg-overlay: rgba(255, 255, 255, 0.8);
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --text-accent: #0891b2;
+            --border-color: transparent;
+            --ring-color: #a5f3fc; /* A light cyan for the ring */
+            --tag-bg: #cffafe;
+            --tag-text: #155e75;
+            --footer-bg: #1f2937;
+        }
+        html.dark {
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --bg-tertiary: #374151;
+            --bg-overlay: rgba(17, 24, 39, 0.8);
+            --text-primary: #d1d5db;
+            --text-secondary: #9ca3af;
+            --text-accent: #67e8f9;
+            --border-color: #374151;
+            --ring-color: #0891b2;
+            --tag-bg: #164e63;
+            --tag-text: #67e8f9;
+            --footer-bg: #111827;
+        }
+        /* Base styles and transitions */
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        /* Reusable theme classes */
+        .theme-bg-primary { background-color: var(--bg-primary); }
+        .theme-bg-secondary { background-color: var(--bg-secondary); }
+        .theme-bg-tertiary { background-color: var(--bg-tertiary); }
+        .theme-text-primary { color: var(--text-primary); }
+        .theme-text-secondary { color: var(--text-secondary); }
+        .theme-text-accent { color: var(--text-accent); }
+        .theme-border { border-color: var(--border-color); }
+        .theme-ring { ring-color: var(--ring-color); }
+        .theme-tag { background-color: var(--tag-bg); color: var(--tag-text); }
+        
+        /* Universal transition for smooth color changes */
+        .theme-bg-primary, .theme-bg-secondary, .theme-bg-tertiary, .theme-text-primary, 
+        .theme-text-secondary, .theme-text-accent, .theme-border, 
+        .theme-ring, .theme-tag, header, footer {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, ring-color 0.3s ease;
+        }
+
+        /* Scroll animations */
+        html.js [data-animate-on-scroll] { opacity: 0; transform: translateY(20px); }
+        html.js [data-animate-on-scroll].visible { opacity: 1; transform: translateY(0); }
+        [data-animate-on-scroll] { transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+
+        /* TypeIt cursor */
+        .ti-cursor { color: var(--text-accent); }
+    </style>
+</head>
+<body class="antialiased font-sans">
+
+    <header class="backdrop-blur-lg sticky top-0 z-50 shadow-sm border-b" style="background-color: var(--bg-overlay); border-color: var(--border-color);">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/" class="flex items-center space-x-3" transition:animate="fade">
+            <a href="/" class="flex items-center space-x-3">
                 <img src="/logo.png" alt="Ariel Digital Solutions Logo" class="h-10 w-auto">
-                <span class="text-xl font-bold text-gray-900 dark:text-white tracking-tight hidden sm:block transition-colors duration-300">Ariel Digital Solutions</span>
+                <span class="theme-text-primary text-xl font-bold tracking-tight hidden sm:block">Ariel Digital Solutions</span>
             </a>
-            
-            <!-- Right side navigation items -->
             <div class="flex items-center space-x-6">
-                <!-- Desktop-only navigation links -->
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="#services" class="text-gray-600 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-300">Services</a>
-                    <a href="#portfolio" class="text-gray-600 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-300">Portfolio</a>
-                    <a href="#about" class="text-gray-600 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-300">About</a>
-                    <a href="#contact" class="text-gray-600 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-300">Contact</a>
+                    <a href="#services" class="theme-text-secondary hover:text-cyan-600">Services</a>
+                    <a href="#portfolio" class="theme-text-secondary hover:text-cyan-600">Portfolio</a>
+                    <a href="#about" class="theme-text-secondary hover:text-cyan-600">About</a>
+                    <a href="#contact" class="theme-text-secondary hover:text-cyan-600">Contact</a>
                 </div>
-                
-                <!-- Theme Toggle Button (no longer a component) -->
-                <button id="theme-toggle" type="button" class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors duration-300">
-                    <svg id="theme-toggle-dark-icon" class="h-5 w-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                    <svg id="theme-toggle-light-icon" class="h-5 w-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                <button id="theme-toggle" type="button" class="p-2 rounded-full theme-text-secondary hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    <svg id="theme-toggle-dark-icon" class="h-5 w-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg id="theme-toggle-light-icon" class="h-5 w-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
                 </button>
             </div>
         </nav>
     </header>
 
     <main>
-        <!-- Hero Section -->
-        <section id="home" class="py-24 md:py-32 bg-white dark:bg-gray-900 transition-colors duration-300">
+        <section id="home" class="theme-bg-secondary py-24 md:py-32">
             <div class="container mx-auto px-6 text-center">
-                <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 dark:text-white leading-tight transition-colors duration-300" transition:animate="slide-up">
+                <h1 class="theme-text-primary text-4xl md:text-6xl font-extrabold leading-tight">
                     Building Digital Experiences,<br>
-                    <span id="typing-animation" class="text-cyan-500 dark:text-cyan-400 transition-colors duration-300"></span>
+                    <span id="typing-animation" class="theme-text-accent"></span>
                 </h1>
-                <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300" transition:animate="fade-up" data-delay="200">
+                <p class="theme-text-secondary mt-6 max-w-2xl mx-auto text-lg">
                     I'm a passionate freelance developer and marketing consultant, helping businesses establish a strong online presence.
                 </p>
-                <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4" transition:animate="fade-up" data-delay="400">
-                    <a href="#contact" class="bg-cyan-500 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-cyan-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">Get a Free Quote</a>
-                    <a href="#services" class="bg-white dark:bg-gray-800 dark:hover:bg-gray-700 text-cyan-600 dark:text-cyan-400 px-8 py-3 rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-300 border border-gray-200 dark:border-gray-700">Learn More</a>
+                <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#contact" class="bg-cyan-500 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-cyan-600 shadow-lg hover:shadow-xl transform hover:-translate-y-1">Get a Free Quote</a>
+                    <a href="#services" class="theme-bg-secondary theme-text-accent theme-border border hover:bg-gray-100 dark:hover:bg-gray-700 px-8 py-3 rounded-full font-bold text-lg">Learn More</a>
                 </div>
             </div>
         </section>
 
-        <!-- Services Section -->
-        <section id="services" class="py-20 bg-gray-50 dark:bg-black/20 overflow-hidden transition-colors duration-300">
+        <section id="services" class="py-20 theme-bg-primary dark:bg-black/20">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white transition-colors duration-300" data-animate-on-scroll>A Full Suite of Digital Services</h2>
-                    <p class="mt-4 text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300" data-animate-on-scroll>Solutions to build, grow, and scale your business online.</p>
+                    <h2 class="theme-text-primary text-3xl md:text-4xl font-bold" data-animate-on-scroll>A Full Suite of Digital Services</h2>
+                    <p class="theme-text-secondary mt-4 text-lg" data-animate-on-scroll>Solutions to build, grow, and scale your business online.</p>
                 </div>
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    <!-- Service Cards with dark mode styles -->
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md dark:shadow-none dark:ring-1 dark:ring-gray-700/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-animate-on-scroll>
-                        <div class="text-cyan-500 dark:text-cyan-400 mb-4 transition-colors duration-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
-                        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3 transition-colors duration-300">Custom Web Development</h3>
-                        <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">Fast, responsive, and SEO-friendly websites built to convert visitors into customers.</p>
+                    <div class="theme-bg-secondary p-8 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-2" data-animate-on-scroll>
+                        <div class="theme-text-accent mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        <h3 class="theme-text-primary text-2xl font-semibold mb-3">Custom Web Development</h3>
+                        <p class="theme-text-secondary">Fast, responsive, and SEO-friendly websites built to convert visitors into customers.</p>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md dark:shadow-none dark:ring-1 dark:ring-gray-700/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-animate-on-scroll data-delay="100">
-                        <div class="text-cyan-500 dark:text-cyan-400 mb-4 transition-colors duration-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-1 4h1m5-4h1m-1 4h1" /></svg></div>
-                        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3 transition-colors duration-300">Contractor Websites</h3>
-                        <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">Specialized sites for contractors that showcase your work, build trust, and generate leads.</p>
+                    <div class="theme-bg-secondary p-8 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-2" data-animate-on-scroll data-delay="100">
+                        <div class="theme-text-accent mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m-1 4h1m5-4h1m-1 4h1" /></svg></div>
+                        <h3 class="theme-text-primary text-2xl font-semibold mb-3">Contractor Websites</h3>
+                        <p class="theme-text-secondary">Specialized sites for contractors that showcase your work, build trust, and generate leads.</p>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md dark:shadow-none dark:ring-1 dark:ring-gray-700/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-animate-on-scroll data-delay="200">
-                        <div class="text-cyan-500 dark:text-cyan-400 mb-4 transition-colors duration-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg></div>
-                        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3 transition-colors duration-300">SEO</h3>
-                        <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">Climb the ranks on Google and attract more organic traffic with targeted SEO strategies.</p>
+                    <div class="theme-bg-secondary p-8 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-2" data-animate-on-scroll data-delay="200">
+                        <div class="theme-text-accent mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg></div>
+                        <h3 class="theme-text-primary text-2xl font-semibold mb-3">SEO</h3>
+                        <p class="theme-text-secondary">Climb the ranks on Google and attract more organic traffic with targeted SEO strategies.</p>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md dark:shadow-none dark:ring-1 dark:ring-gray-700/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-animate-on-scroll data-delay="300">
-                        <div class="text-cyan-500 dark:text-cyan-400 mb-4 transition-colors duration-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a3.001 3.001 0 015.658 0M12 6a3 3 0 11-6 0 3 3 0 016 0zm6 0a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div>
-                        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3 transition-colors duration-300">Social Media</h3>
-                        <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">Build your brand and engage with your community through strategic social media management.</p>
+                    <div class="theme-bg-secondary p-8 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-2" data-animate-on-scroll data-delay="300">
+                        <div class="theme-text-accent mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a3.001 3.001 0 015.658 0M12 6a3 3 0 11-6 0 3 3 0 016 0zm6 0a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div>
+                        <h3 class="theme-text-primary text-2xl font-semibold mb-3">Social Media</h3>
+                        <p class="theme-text-secondary">Build your brand and engage with your community through strategic social media management.</p>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md dark:shadow-none dark:ring-1 dark:ring-gray-700/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-animate-on-scroll data-delay="400">
-                        <div class="text-cyan-500 dark:text-cyan-400 mb-4 transition-colors duration-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.354a1.76 1.76 0 01.592-2.088L11 5.882z" /><path d="M11 5.882L15.5 2.5l2.5 4-2.5 4-2.5-4z"/></svg></div>
-                        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3 transition-colors duration-300">Digital Marketing</h3>
-                        <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">Comprehensive marketing campaigns, from email marketing to paid ads, to grow your audience.</p>
+                    <div class="theme-bg-secondary p-8 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-2" data-animate-on-scroll data-delay="400">
+                        <div class="theme-text-accent mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.354a1.76 1.76 0 01.592-2.088L11 5.882z" /><path d="M11 5.882L15.5 2.5l2.5 4-2.5 4-2.5-4z"/></svg></div>
+                        <h3 class="theme-text-primary text-2xl font-semibold mb-3">Digital Marketing</h3>
+                        <p class="theme-text-secondary">Comprehensive marketing campaigns, from email marketing to paid ads, to grow your audience.</p>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md dark:shadow-none dark:ring-1 dark:ring-gray-700/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2" data-animate-on-scroll data-delay="500">
-                        <div class="text-cyan-500 dark:text-cyan-400 mb-4 transition-colors duration-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 00-4-4H3V9h2a4 4 0 004-4V3l5 4-5 4zM15 17v-2a4 4 0 014-4h2V9h-2a4 4 0 01-4-4V3l-5 4 5 4z" /></svg></div>
-                        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3 transition-colors duration-300">Tech Consulting</h3>
-                        <p class="text-gray-600 dark:text-gray-300 transition-colors duration-300">Expert advice on technology strategy and software selection to optimize your business operations.</p>
+                    <div class="theme-bg-secondary p-8 rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-2" data-animate-on-scroll data-delay="500">
+                        <div class="theme-text-accent mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 00-4-4H3V9h2a4 4 0 004-4V3l5 4-5 4zM15 17v-2a4 4 0 014-4h2V9h-2a4 4 0 01-4-4V3l-5 4 5 4z" /></svg></div>
+                        <h3 class="theme-text-primary text-2xl font-semibold mb-3">Tech Consulting</h3>
+                        <p class="theme-text-secondary">Expert advice on technology strategy and software selection to optimize your business operations.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Portfolio Section -->
-        <section id="portfolio" class="py-20 bg-white dark:bg-gray-900 overflow-hidden transition-colors duration-300">
+        <section id="portfolio" class="theme-bg-secondary py-20 overflow-hidden">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white transition-colors duration-300" data-animate-on-scroll>My Featured Project</h2>
-                    <p class="mt-4 text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300" data-animate-on-scroll>Here's a look at my latest client work.</p>
+                    <h2 class="theme-text-primary text-3xl md:text-4xl font-bold" data-animate-on-scroll>My Featured Project</h2>
+                    <p class="theme-text-secondary mt-4 text-lg" data-animate-on-scroll>Here's a look at my latest client work.</p>
                 </div>
                 <div class="max-w-xl mx-auto">
-                    <div class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow-md dark:shadow-none dark:ring-1 dark:ring-gray-700/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 flex flex-col" data-animate-on-scroll>
+                    <div class="theme-bg-tertiary rounded-xl shadow-md hover:shadow-xl transform hover:-translate-y-2 flex flex-col" data-animate-on-scroll>
                         <Image src={mayoroofPreview} alt="Mayor Roof LLC website preview" class="rounded-t-xl object-cover" />
                         <div class="p-8 flex flex-col flex-grow">
-                            <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2 transition-colors duration-300">Mayor Roof LLC</h3>
-                            <p class="text-gray-600 dark:text-gray-300 mb-4 flex-grow transition-colors duration-300">A professional, lead-focused website for a premier roofing contractor. Built to establish trust and streamline the process for requesting free estimates.</p>
+                            <h3 class="theme-text-primary text-2xl font-semibold mb-2">Mayor Roof LLC</h3>
+                            <p class="theme-text-secondary mb-4 flex-grow">A professional, lead-focused website for a premier roofing contractor. Built to establish trust and streamline the process for requesting free estimates.</p>
                             <div class="mb-4">
-                                <span class="inline-block bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full transition-colors duration-300">Astro</span>
-                                <span class="inline-block bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-300 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full transition-colors duration-300">Tailwind CSS</span>
+                                <span class="theme-tag inline-block text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Astro</span>
+                                <span class="theme-tag inline-block text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Tailwind CSS</span>
                             </div>
-                            <a href="https://mayoroof.com/" target="_blank" rel="noopener noreferrer" class="mt-auto inline-block text-center bg-cyan-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-cyan-600 transition-colors duration-300">View Live Site</a>
+                            <a href="https://mayoroof.com/" target="_blank" rel="noopener noreferrer" class="mt-auto inline-block text-center bg-cyan-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-cyan-600">View Live Site</a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- About Me Section -->
-        <section id="about" class="py-20 bg-gray-50 dark:bg-black/20 overflow-hidden transition-colors duration-300">
+        <section id="about" class="py-20 theme-bg-primary dark:bg-black/20">
              <div class="container mx-auto px-6">
                 <div class="grid md:grid-cols-5 gap-12 items-center">
                     <div class="md:col-span-2" data-animate-on-scroll>
-                        <Image src={headshot} alt="A photo of Ariel" class="rounded-full shadow-2xl mx-auto w-64 h-64 md:w-80 md:h-80 object-cover ring-4 ring-offset-4 ring-cyan-500/50 dark:ring-cyan-400/50 transition-all duration-300" />
+                        <Image src={headshot} alt="A photo of Ariel" class="rounded-full shadow-2xl mx-auto w-64 h-64 md:w-80 md:h-80 object-cover ring-4 ring-offset-4 theme-ring" />
                     </div>
                     <div class="md:col-span-3 text-center md:text-left" data-animate-on-scroll data-delay="200">
-                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white transition-colors duration-300">About Me</h2>
-                        <p class="mt-4 text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300">I'm a driven and detail-oriented developer with a passion for technology and problem-solving.</p>
-                        <ul class="mt-6 space-y-4 text-gray-700 dark:text-gray-300 transition-colors duration-300">
-                            <li class="flex items-start"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-cyan-500 dark:text-cyan-400 flex-shrink-0 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>Currently studying Computer Science at the <span class="font-semibold">University of Georgia (UGA)</span>.</span></li>
-                            <li class="flex items-start"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-cyan-500 dark:text-cyan-400 flex-shrink-0 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>Gaining real-world experience through an internship at a <span class="font-semibold">Fortune 500 company</span>.</span></li>
-                            <li class="flex items-start"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-cyan-500 dark:text-cyan-400 flex-shrink-0 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>Committed to delivering high-quality, user-centric digital solutions for my freelance clients.</span></li>
+                        <h2 class="theme-text-primary text-3xl md:text-4xl font-bold">About Me</h2>
+                        <p class="theme-text-secondary mt-4 text-lg">I'm a driven and detail-oriented developer with a passion for technology and problem-solving.</p>
+                        <ul class="theme-text-primary mt-6 space-y-4">
+                            <li class="flex items-start"><svg xmlns="http://www.w3.org/2000/svg" class="theme-text-accent h-6 w-6 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>Currently studying Computer Science at the <span class="font-semibold">University of Georgia (UGA)</span>.</span></li>
+                            <li class="flex items-start"><svg xmlns="http://www.w3.org/2000/svg" class="theme-text-accent h-6 w-6 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>Gaining real-world experience through an internship at a <span class="font-semibold">Fortune 500 company</span>.</span></li>
+                            <li class="flex items-start"><svg xmlns="http://www.w3.org/2000/svg" class="theme-text-accent h-6 w-6 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>Committed to delivering high-quality, user-centric digital solutions for my freelance clients.</span></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+        <section id="contact" class="theme-bg-secondary py-20">
             <div class="container mx-auto px-6 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white transition-colors duration-300" data-animate-on-scroll>Ready to Start a Project?</h2>
-                <p class="mt-4 max-w-xl mx-auto text-lg text-gray-600 dark:text-gray-300 transition-colors duration-300" data-animate-on-scroll>Let's connect! I'm excited to learn about your ideas and help bring them to life.</p>
-                <div class="mt-8" data-animate-on-scroll><a href="mailto:hello@arieldigitalsolutions.com" class="inline-block bg-cyan-500 text-white px-10 py-4 rounded-full font-bold text-xl hover:bg-cyan-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">hello@arieldigitalsolutions.com</a></div>
+                <h2 class="theme-text-primary text-3xl md:text-4xl font-bold" data-animate-on-scroll>Ready to Start a Project?</h2>
+                <p class="theme-text-secondary mt-4 max-w-xl mx-auto text-lg" data-animate-on-scroll>Let's connect! I'm excited to learn about your ideas and help bring them to life.</p>
+                <div class="mt-8" data-animate-on-scroll><a href="mailto:hello@arieldigitalsolutions.com" class="inline-block bg-cyan-500 text-white px-10 py-4 rounded-full font-bold text-xl hover:bg-cyan-600 shadow-lg hover:shadow-xl transform hover:-translate-y-1">hello@arieldigitalsolutions.com</a></div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-gray-800 dark:bg-black/50 text-white py-8 transition-colors duration-300">
+    <footer class="text-white py-8" style="background-color: var(--footer-bg);">
         <div class="container mx-auto px-6 text-center">
             <p>&copy; {new Date().getFullYear()} Ariel Digital Solutions. All Rights Reserved.</p>
-            <p class="text-sm text-gray-400 mt-2">Designed & Built by Ariel</p>
+            <p class="text-sm mt-2" style="color: var(--text-secondary);">Designed & Built by Ariel</p>
         </div>
     </footer>
 
@@ -214,9 +258,7 @@ import mayoroofPreview from '../assets/portfolio/mayoroof.png';
                     lightIcon.classList.remove('hidden');
                 }
             };
-
             updateIcons(); // Set initial state
-
             themeToggleButton.addEventListener('click', () => {
                 document.documentElement.classList.toggle('dark');
                 localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
@@ -246,29 +288,5 @@ import mayoroofPreview from '../assets/portfolio/mayoroof.png';
             }).go();
         });
     </script>
-    <style is:global>
-        html.js [data-animate-on-scroll] {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        html.js [data-animate-on-scroll].visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        [data-animate-on-scroll] {
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        @keyframes fade-in { from { opacity: 0; } }
-        @keyframes fade-out { to { opacity: 0; } }
-        @keyframes slide-in { from { transform: translateY(30px); opacity: 0; } }
-        @keyframes slide-out { to { transform: translateY(30px); opacity: 0; } }
-        [transition\:animate="slide-up"] { animation: slide-in 0.7s 0.1s both; }
-        [transition\:animate="fade-up"] { animation: slide-in 0.7s both; }
-        [transition\:animate="fade"] { animation: fade-in 0.7s both; }
-        [transition\:animate="fade-up"][data-delay="200"] { animation-delay: 0.3s; }
-        [transition\:animate="fade-up"][data-delay="400"] { animation-delay: 0.5s; }
-        .ti-cursor { color: #0891b2; --dark-color: #22d3ee; }
-        .dark .ti-cursor { color: var(--dark-color); }
-    </style>
 </body>
 </html>
