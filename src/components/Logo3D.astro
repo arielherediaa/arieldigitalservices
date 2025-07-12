@@ -3,10 +3,12 @@
 // Props can be added here if needed in the future
 ---
 
-<div id="logo-container-3d" class="h-28 w-auto mx-auto mb-8 relative fade-in-up"></div>
-<div class="logo-fallback fade-in-up">
-    <img src="/logo.png" alt="Ariel Digital Services Logo" class="h-28 w-auto mx-auto mb-8">
-</div>
+<a href="/" class="block">
+    <div id="logo-container-3d" class="h-28 w-auto mx-auto mb-8 relative fade-in-up cursor-pointer hover:opacity-80 transition-opacity"></div>
+    <div class="logo-fallback fade-in-up">
+        <img src="/logo.png" alt="Ariel Digital Services Logo" class="h-28 w-auto mx-auto mb-8 cursor-pointer hover:opacity-80 transition-opacity">
+    </div>
+</a>
 
 <style>
     /* Logo Fallback Styles */
@@ -56,8 +58,8 @@
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     };
 
-    // If WebGL is not available or on mobile, show fallback
-    if (!isWebGLAvailable() || isMobile()) {
+    // If WebGL is not available, show fallback
+    if (!isWebGLAvailable()) {
         if (container) container.style.display = 'none';
         if (fallback) fallback.classList.add('show');
     } else if (container) {
