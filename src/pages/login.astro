@@ -1,0 +1,272 @@
+---
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Ariel Digital Services</title>
+    <meta name="description" content="Login or register to access your Ariel Digital Services client portal.">
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.166.1/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.166.1/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script is:inline>
+        const theme = (() => {
+            if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+                return localStorage.getItem('theme');
+            }
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                return 'dark';
+            }
+            return 'light';
+        })();
+        if (theme === 'dark') document.documentElement.classList.add('dark');
+        document.documentElement.classList.add('js');
+    </script>
+
+    <style is:global>
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f8f9fa;
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --text-accent: #0891b2;
+            --border-color: #e5e7eb;
+            --ring-color: #a5f3fc;
+            --footer-bg: #1f2937;
+        }
+        html.dark {
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --bg-tertiary: #374151;
+            --text-primary: #d1d5db;
+            --text-secondary: #9ca3af;
+            --text-accent: #67e8f9;
+            --border-color: #374151;
+            --ring-color: #0891b2;
+            --footer-bg: #111827;
+        }
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        .theme-bg-primary { background-color: var(--bg-primary); }
+        .theme-bg-secondary { background-color: var(--bg-secondary); }
+        .theme-text-primary { color: var(--text-primary); }
+        .theme-text-secondary { color: var(--text-secondary); }
+        .theme-text-accent { color: var(--text-accent); }
+        .theme-border { border-color: var(--border-color); }
+        
+        /* --- Loading Screen Styles --- */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-primary);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+        #loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 5px solid var(--border-color);
+            border-bottom-color: var(--text-accent);
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- Login Content Animation (CORRECTED) --- */
+        
+        /* 1. Define the starting state for any element with this class */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        /* 2. ONLY apply the animation when the parent container has the 'loaded' class */
+        #login-content.loaded .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 3. Apply staggered delays, also conditional on the 'loaded' class */
+        #login-content.loaded #logo-container-3d.fade-in-up { animation-delay: 0.2s; }
+        #login-content.loaded .login-form h1.fade-in-up { animation-delay: 0.4s; }
+        #login-content.loaded .login-form p.fade-in-up { animation-delay: 0.5s; }
+        #login-content.loaded .login-form .form-group:nth-of-type(1).fade-in-up { animation-delay: 0.6s; }
+        #login-content.loaded .login-form .form-group:nth-of-type(2).fade-in-up { animation-delay: 0.7s; }
+        #login-content.loaded .login-form button.fade-in-up { animation-delay: 0.8s; }
+        #login-content.loaded .login-form .extra-links.fade-in-up { animation-delay: 0.9s; }
+        #login-content.loaded .back-home-link.fade-in-up { animation-delay: 1s; }
+    </style>
+</head>
+<body class="antialiased font-sans theme-bg-primary">
+
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <main id="login-content" class="min-h-screen flex flex-col items-center justify-center container mx-auto px-6 py-8" style="visibility: hidden;">
+        <div class="w-full max-w-md">
+            <div id="logo-container-3d" class="h-28 w-auto mx-auto mb-8 relative fade-in-up"></div>
+            
+            <div class="theme-bg-secondary p-8 md:p-10 rounded-2xl shadow-xl w-full login-form">
+                <h1 class="theme-text-primary text-3xl font-bold text-center mb-2 fade-in-up">Welcome Back</h1>
+                <p class="theme-text-secondary text-center mb-8 fade-in-up">Sign in to continue to your portal.</p>
+                
+                <form>
+                    <div class="space-y-6">
+                        <div class="form-group fade-in-up flex flex-col">
+                            <label for="email" class="block text-sm font-medium theme-text-secondary mb-2">Email Address</label>
+                            <input type="email" id="email" name="email"
+                                class="w-full px-4 py-3 theme-bg-primary theme-text-primary border theme-border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition"
+                                placeholder="you@example.com">
+                        </div>
+                        <div class="form-group fade-in-up flex flex-col">
+                             <label for="password" class="block text-sm font-medium theme-text-secondary mb-2">Password</label>
+                            <input type="password" id="password" name="password"
+                                class="w-full px-4 py-3 theme-bg-primary theme-text-primary border theme-border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition"
+                                placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-cyan-500 text-white px-8 py-3 mt-8 rounded-full font-bold text-lg hover:bg-cyan-600 shadow-lg hover:shadow-cyan-500/30 transform hover:-translate-y-1 transition-all duration-300 fade-in-up">
+                        Login
+                    </button>
+                </form>
+
+                <div class="text-center mt-6 text-sm extra-links fade-in-up">
+                    <a href="#" class="font-medium theme-text-accent hover:underline">Forgot Password?</a>
+                    <p class="theme-text-secondary mt-2">
+                        Don't have an account? <a href="#" class="font-medium theme-text-accent hover:underline">Register</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-center mt-8 back-home-link fade-in-up">
+                <a href="/" class="text-sm theme-text-secondary hover:theme-text-primary transition">&larr; Back to Home</a>
+            </div>
+        </div>
+    </main>
+
+    <script is:inline>
+        // Manages the loading screen and content visibility (CORRECTED)
+        document.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('loader');
+            const content = document.getElementById('login-content');
+            
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                content.style.visibility = 'visible';
+
+                // **THIS IS THE FIX:** Add the 'loaded' class to the parent
+                // container, which will now trigger the animations in the CSS.
+                content.classList.add('loaded');
+            }, 500);
+        });
+    </script>
+    
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        const container = document.getElementById('logo-container-3d');
+        if (container) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 2.5;
+            controls.minPolarAngle = Math.PI / 2;
+            controls.maxPolarAngle = Math.PI / 2;
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+            directionalLight.position.set(5, 10, 7.5);
+            scene.add(directionalLight);
+
+            const loader = new GLTFLoader();
+            loader.load('/logo.glb', (gltf) => {
+                const model = gltf.scene;
+                const box = new THREE.Box3().setFromObject(model);
+                const center = box.getCenter(new THREE.Vector3());
+                const size = box.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 6 / maxDim;
+                
+                model.position.sub(center);
+                model.scale.set(scale, scale, scale);
+                scene.add(model);
+                camera.position.z = 4;
+            });
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            };
+            animate();
+
+            const onResize = () => {
+                if (container) {
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                }
+            };
+            window.addEventListener('resize', onResize);
+        }
+    </script>
+</body>
+</html> 
