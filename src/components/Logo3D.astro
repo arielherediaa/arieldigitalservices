@@ -1,14 +1,24 @@
 ---
 // Reusable 3D Logo Component
 // Props can be added here if needed in the future
+const { disableLink = false } = Astro.props;
 ---
 
-<a href="/" class="block">
+{disableLink ? (
+  <>
     <div id="logo-container-3d" class="h-28 w-auto mx-auto mb-8 relative fade-in-up cursor-pointer hover:opacity-80 transition-opacity"></div>
     <div class="logo-fallback fade-in-up">
-        <img src="/logo.png" alt="Ariel Digital Services Logo" class="h-28 w-auto mx-auto mb-8 cursor-pointer hover:opacity-80 transition-opacity">
+      <img src="/logo.png" alt="Ariel Digital Services Logo" class="h-28 w-auto mx-auto mb-8 cursor-pointer hover:opacity-80 transition-opacity">
     </div>
-</a>
+  </>
+) : (
+  <a href="/" class="block">
+    <div id="logo-container-3d" class="h-28 w-auto mx-auto mb-8 relative fade-in-up cursor-pointer hover:opacity-80 transition-opacity"></div>
+    <div class="logo-fallback fade-in-up">
+      <img src="/logo.png" alt="Ariel Digital Services Logo" class="h-28 w-auto mx-auto mb-8 cursor-pointer hover:opacity-80 transition-opacity">
+    </div>
+  </a>
+)}
 
 <style>
     /* Logo Fallback Styles */

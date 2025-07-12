@@ -122,10 +122,10 @@ import Logo3D from '../components/Logo3D.astro';
 
     <header class="backdrop-blur-lg sticky top-0 z-50 shadow-sm border-b" style="background-color: var(--bg-overlay); border-color: var(--border-color);">
         <nav class="container mx-auto px-6 py-4 flex items-center">
-            <a href="/" class="flex items-center space-x-3 flex-shrink-0">
+            <div class="flex items-center space-x-3 flex-shrink-0 cursor-default select-none">
                 <img src="/logo.png" alt="Ariel Digital Services Logo" class="h-10 w-auto">
                 <span class="theme-text-primary text-xl font-bold tracking-tight hidden sm:block">Ariel Digital Services</span>
-            </a>
+            </div>
             
             <div class="flex-grow"></div>
 
@@ -149,10 +149,13 @@ import Logo3D from '../components/Logo3D.astro';
     </header>
 
     <main>
-        <section id="home" class="theme-bg-secondary py-24 md:py-32">
+        <section id="home" class="theme-bg-secondary py-10 md:py-16">
             <div class="container mx-auto px-6 text-center">
                 
-                <Logo3D />
+                <div class="hidden md:block">
+                    <Logo3D disableLink />
+                </div>
+                <img src="/logo.png" alt="Ariel Digital Services Logo" class="h-20 w-auto mx-auto mb-8 md:hidden">
 
                 <h1 class="theme-text-primary text-4xl md:text-6xl font-extrabold leading-tight">
                     Building Digital Experiences,<br>
