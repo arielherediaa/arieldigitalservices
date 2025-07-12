@@ -1,0 +1,131 @@
+---
+// Reusable 3D Logo Component
+// Props can be added here if needed in the future
+---
+
+<div id="logo-container-3d" class="h-28 w-auto mx-auto mb-8 relative fade-in-up"></div>
+<div class="logo-fallback fade-in-up">
+    <img src="/logo.png" alt="Ariel Digital Services Logo" class="h-28 w-auto mx-auto mb-8">
+</div>
+
+<style>
+    /* Logo Fallback Styles */
+    .logo-fallback {
+        display: none;
+        text-align: center;
+    }
+    .logo-fallback img {
+        height: 7rem;
+        width: auto;
+        margin: 0 auto;
+    }
+    .logo-fallback.show {
+        display: block;
+    }
+</style>
+
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.166.1/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.166.1/examples/jsm/"
+        }
+    }
+</script>
+
+<script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const container = document.getElementById('logo-container-3d');
+    const fallback = document.querySelector('.logo-fallback');
+    
+    // Check if WebGL is supported and if we're on a mobile device
+    const isWebGLAvailable = () => {
+        try {
+            const canvas = document.createElement('canvas');
+            return !!(window.WebGLRenderingContext && 
+                (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+        } catch (e) {
+            return false;
+        }
+    };
+
+    const isMobile = () => {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    };
+
+    // If WebGL is not available or on mobile, show fallback
+    if (!isWebGLAvailable() || isMobile()) {
+        if (container) container.style.display = 'none';
+        if (fallback) fallback.classList.add('show');
+    } else if (container) {
+        try {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 2.5;
+            controls.minPolarAngle = Math.PI / 2;
+            controls.maxPolarAngle = Math.PI / 2;
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+            directionalLight.position.set(5, 10, 7.5);
+            scene.add(directionalLight);
+
+            const loader = new GLTFLoader();
+            loader.load('/logo.glb', (gltf) => {
+                const model = gltf.scene;
+                const box = new THREE.Box3().setFromObject(model);
+                const center = box.getCenter(new THREE.Vector3());
+                const size = box.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 6 / maxDim;
+                
+                model.position.sub(center);
+                model.scale.set(scale, scale, scale);
+                scene.add(model);
+                camera.position.z = 4;
+            }, undefined, (error) => {
+                // If 3D model fails to load, show fallback
+                console.error('3D model failed to load:', error);
+                if (container) container.style.display = 'none';
+                if (fallback) fallback.classList.add('show');
+            });
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            };
+            animate();
+
+            const onResize = () => {
+                if (container) {
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                }
+            };
+            window.addEventListener('resize', onResize);
+        } catch (error) {
+            // If Three.js fails to initialize, show fallback
+            console.error('Three.js failed to initialize:', error);
+            if (container) container.style.display = 'none';
+            if (fallback) fallback.classList.add('show');
+        }
+    }
+</script> 

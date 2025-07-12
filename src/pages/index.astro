@@ -5,6 +5,7 @@ import { Image } from 'astro:assets';
 import headshot from '../assets/headshot.png';
 import { ViewTransitions } from 'astro:transitions';
 import mayoroofPreview from '../assets/portfolio/mayoroof.png';
+import Logo3D from '../components/Logo3D.astro';
 ---
 
 <!DOCTYPE html>
@@ -24,14 +25,7 @@ import mayoroofPreview from '../assets/portfolio/mayoroof.png';
 
     <ViewTransitions />
 
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.166.1/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.166.1/examples/jsm/"
-            }
-        }
-    </script>
+
 
     <script is:inline>
         const theme = (() => {
@@ -158,8 +152,9 @@ import mayoroofPreview from '../assets/portfolio/mayoroof.png';
         <section id="home" class="theme-bg-secondary py-24 md:py-32">
             <div class="container mx-auto px-6 text-center">
                 
-                <div id="logo-container-3d" class="h-28 w-auto mx-auto mb-8 relative hidden md:block"></div>
-
+                <div class="hidden md:block">
+                    <Logo3D />
+                </div>
                 <img src="/logo.png" alt="Ariel Digital Services Logo" class="h-20 w-auto mx-auto mb-8 md:hidden">
 
                 <h1 class="theme-text-primary text-4xl md:text-6xl font-extrabold leading-tight">
@@ -360,95 +355,6 @@ import mayoroofPreview from '../assets/portfolio/mayoroof.png';
         });
     </script>
     
-    <script type="module">
-        import * as THREE from 'three';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('logo-container-3d');
-            
-            // If the container is not found or is hidden by CSS, do not run the 3D script.
-            if (!container || container.offsetParent === null) {
-                return; 
-            }
-
-            // --- Scene, Camera, and Renderer Setup ---
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            container.appendChild(renderer.domElement);
-
-            // --- Controls (For Dragging and Autorotation) ---
-            const controls = new OrbitControls(camera, renderer.domElement);
-            controls.enableZoom = false; 
-            controls.enablePan = false; 
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            
-            controls.autoRotate = true;
-            controls.autoRotateSpeed = 2.0;
-
-            // Restrict to horizontal rotation only
-            controls.minPolarAngle = Math.PI / 2;
-            controls.maxPolarAngle = Math.PI / 2;
-
-            // --- Lighting ---
-            const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
-            scene.add(ambientLight);
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-            directionalLight.position.set(5, 10, 7.5);
-            scene.add(directionalLight);
-
-            // --- Model Loader ---
-            const loader = new GLTFLoader();
-            let model;
-
-            loader.load(
-                '/logo.glb',
-                function (gltf) {
-                    model = gltf.scene;
-                    
-                    const box = new THREE.Box3().setFromObject(model);
-                    const center = box.getCenter(new THREE.Vector3());
-                    const size = box.getSize(new THREE.Vector3());
-                    const maxDim = Math.max(size.x, size.y, size.z);
-                    
-                    const scale = 6 / maxDim; // Keeps the larger scale
-                    model.position.sub(center);
-                    model.scale.set(scale, scale, scale);
-                    
-                    scene.add(model);
-                    camera.position.z = 4;
-                },
-                undefined, 
-                (error) => console.error('An error happened loading the 3D model:', error)
-            );
-
-            // --- Animation Loop ---
-            const animate = () => {
-                requestAnimationFrame(animate);
-                controls.update(); // This now handles both autorotation and user interaction
-                renderer.render(scene, camera);
-            };
-            animate();
-
-            // --- Responsive Resizing ---
-            const onResize = () => {
-                if (container) {
-                    camera.aspect = container.clientWidth / container.clientHeight;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(container.clientWidth, container.clientHeight);
-                }
-            };
-            window.addEventListener('resize', onResize);
-            const resizeObserver = new ResizeObserver(onResize);
-            resizeObserver.observe(container);
-        });
-    </script>
 </body>
 </html>
 
